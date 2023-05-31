@@ -252,7 +252,7 @@ const App = () => {
   
   return (
   <div>
-  <h1>Registro de Usuarios</h1>
+  <h1>MeTocaFinal LTDA</h1>
   <UserRegistrationForm onUserRegistration={handleUserRegistration} registeredUsers={registeredUsers} />
   <h1>Creación de Turnos</h1>
   <AppointmentCreation registeredUsers={registeredUsers} />
