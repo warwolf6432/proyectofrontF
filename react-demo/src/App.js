@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 
 // Componente de registro de usuario
-const UserRegistrationForm = () => {
+const UserRegistrationForm = ({ onUserRegistration , registeredUsers }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [registeredUsers, setRegisteredUsers] = useState([]);
 
   const handleRegistration = (e) => {
     e.preventDefault();
@@ -18,8 +17,8 @@ const UserRegistrationForm = () => {
       phone
     };
 
-    // Actualizar la lista de usuarios registrados
-    setRegisteredUsers([...registeredUsers, newUser]);
+    // Llamar a la función de registro de usuario del componente padre
+    onUserRegistration(newUser);
 
     // Restablecer los valores de los campos del formulario
     setName('');
@@ -51,22 +50,22 @@ const UserRegistrationForm = () => {
         />
         <button type="submit">Registrarse</button>
       </form>
-
       <h2>Usuarios Registrados</h2>
-      {registeredUsers.map((user, index) => (
-        <div key={index}>
-          <p>Nombre: {user.name}</p>
-          <p>Correo electrónico: {user.email}</p>
-          <p>Teléfono: {user.phone}</p>
-        </div>
-      ))}
+      <ul>
+        {registeredUsers.map((user, index) => (
+          <li key={index}>
+            <p>Nombre: {user.name}</p>
+            <p>Correo electrónico: {user.email}</p>
+            <p>Teléfono: {user.phone}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-
-
-const AppointmentCreation = () => {
+// Componente de creación de turnos
+const AppointmentCreation = ({ registeredUsers }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [appointments, setAppointments] = useState([]);
@@ -108,10 +107,11 @@ const AppointmentCreation = () => {
           <h3>Turno programado para: {selectedDate.toString()}</h3>
           <select value={selectedUser} onChange={handleUserSelection}>
             <option value="">Seleccionar Usuario</option>
-            {/* Opciones de usuarios */}
-            <option value="usuario1">Usuario 1</option>
-            <option value="usuario2">Usuario 2</option>
-            <option value="usuario3">Usuario 3</option>
+            {registeredUsers.map((user, index) => (
+              <option value={user.name} key={index}>
+                {user.name}
+              </option>
+            ))}
           </select>
           <button type="submit">Registrar Turno</button>
         </form>
@@ -127,10 +127,6 @@ const AppointmentCreation = () => {
     </div>
   );
 };
-
-
-
-
 
 
 // Componente de notificaciones
@@ -248,17 +244,23 @@ const RatingAndReviews = () => {
 
 // Componente principal de la aplicación
 const App = () => {
+  const [registeredUsers, setRegisteredUsers] = useState([]);
+  
+  const handleUserRegistration = (newUser) => {
+  setRegisteredUsers([...registeredUsers, newUser]);
+  };
+  
   return (
-    <div>
-      <h1>Registro de Usuarios</h1>
-      <UserRegistrationForm />
-      <h1>Creación de Turnos</h1>
-      <AppointmentCreation />
-      <Notifications />
-      <RatingAndReviews />
-    </div>
+  <div>
+  <h1>Registro de Usuarios</h1>
+  <UserRegistrationForm onUserRegistration={handleUserRegistration} registeredUsers={registeredUsers} />
+  <h1>Creación de Turnos</h1>
+  <AppointmentCreation registeredUsers={registeredUsers} />
+  <Notifications />
+  <RatingAndReviews />
+  </div>
   );
-};
+  };
 
 
 export default App;
