@@ -64,33 +64,73 @@ const UserRegistrationForm = () => {
   );
 };
 
-// Componente de creación de turnos
+
+
 const AppointmentCreation = () => {
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [appointments, setAppointments] = useState([]);
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
-  
-    // Simular la lógica de registro de turno localmente
-    const appointmentData = {
-      date: date,
-      // Otros datos del turno como el usuario, el médico, etc.
-    };
-  
-    // Imprimir los datos del turno en la consola
-    console.log('Turno registrado:', appointmentData);
   };
-  
+
+  const handleUserSelection = (e) => {
+    setSelectedUser(e.target.value);
+  };
+
+  const handleAppointmentRegistration = (e) => {
+    e.preventDefault();
+
+    if (!selectedDate || !selectedUser) {
+      alert('Por favor, selecciona una fecha y un usuario');
+      return;
+    }
+
+    const appointmentData = {
+      date: selectedDate,
+      user: selectedUser
+    };
+
+    setAppointments([...appointments, appointmentData]);
+
+    setSelectedDate(null);
+    setSelectedUser(null);
+  };
 
   return (
     <div>
       <h2>Calendario Mensual</h2>
-      {/* Componente de calendario para seleccionar una fecha */}
       <Calendar onChange={handleDateSelection} value={selectedDate} />
-      {selectedDate && <p>Turno programado para: {selectedDate.toString()}</p>}
+
+      {selectedDate && (
+        <form onSubmit={handleAppointmentRegistration}>
+          <h3>Turno programado para: {selectedDate.toString()}</h3>
+          <select value={selectedUser} onChange={handleUserSelection}>
+            <option value="">Seleccionar Usuario</option>
+            {/* Opciones de usuarios */}
+            <option value="usuario1">Usuario 1</option>
+            <option value="usuario2">Usuario 2</option>
+            <option value="usuario3">Usuario 3</option>
+          </select>
+          <button type="submit">Registrar Turno</button>
+        </form>
+      )}
+
+      <h2>Turnos Registrados</h2>
+      {appointments.map((appointment, index) => (
+        <div key={index}>
+          <p>Fecha: {appointment.date.toString()}</p>
+          <p>Usuario: {appointment.user}</p>
+        </div>
+      ))}
     </div>
   );
 };
+
+
+
+
 
 
 // Componente de notificaciones
@@ -129,6 +169,7 @@ const Notifications = () => {
 const RatingAndReviews = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([]);
 
   const handleRatingChange = (value) => {
     setRating(value);
@@ -140,33 +181,32 @@ const RatingAndReviews = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     // Validar que se haya seleccionado una calificación
     if (rating === 0) {
       alert('Por favor, selecciona una calificación');
       return;
     }
-  
+
     // Validar que se haya ingresado un comentario
     if (comment.trim() === '') {
       alert('Por favor, ingresa un comentario');
       return;
     }
-  
+
     // Aquí puedes realizar la lógica para manejar la calificación y comentario localmente
     const ratingAndComment = {
       rating,
       comment
     };
-  
-    // Imprimir los datos de calificación y comentario en la consola
-    console.log('Calificación y comentario:', ratingAndComment);
-  
+
+    // Agregar el nuevo comentario a la lista de comentarios
+    setComments([...comments, ratingAndComment]);
+
     // Restablecer los valores de calificación y comentario
     setRating(0);
     setComment('');
   };
-  
 
   return (
     <div>
@@ -187,9 +227,24 @@ const RatingAndReviews = () => {
         <textarea value={comment} onChange={handleCommentChange} placeholder="Escribe tu comentario..." />
       </div>
       <button onClick={handleSubmit}>Enviar</button>
+
+      <h3>Comentarios Registrados:</h3>
+      {comments.length === 0 ? (
+        <p>No hay comentarios registrados.</p>
+      ) : (
+        <ul>
+          {comments.map((comment, index) => (
+            <li key={index}>
+              <p>Calificación: {comment.rating}</p>
+              <p>Comentario: {comment.comment}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
+
 
 // Componente principal de la aplicación
 const App = () => {
