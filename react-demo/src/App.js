@@ -8,11 +8,11 @@ const UserRegistrationForm = ({ onUserRegistration }) => {
   const [registeredUsers, setRegisteredUsers] = useState([]);
 
   useEffect(() => {
-    const storedUsers = window.localStorage.getItem('registeredUsers');
-    if (storedUsers) {
-      const parsedUsers = JSON.parse(storedUsers);
-      setRegisteredUsers(parsedUsers);
-    }
+  const storedUsers = window.localStorage.getItem('registeredUsers');
+  if (storedUsers) {
+    const parsedUsers = JSON.parse(storedUsers);
+    setRegisteredUsers(parsedUsers);
+  }
   }, []);
 
   window.localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
