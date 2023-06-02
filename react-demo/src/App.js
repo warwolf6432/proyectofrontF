@@ -83,8 +83,8 @@ const UserRegistrationForm = ({ onUserRegistration }) => {
 
 // Componente de creación de turnos
 const AppointmentCreation = ({ registeredUsers }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedUser, setSelectedUser] = useState("");
   const [appointments, setAppointments] = useState([]);
 
   const handleDateSelection = (date) => {
@@ -98,7 +98,7 @@ const AppointmentCreation = ({ registeredUsers }) => {
   const handleAppointmentRegistration = (e) => {
     e.preventDefault();
 
-    if (!selectedDate || !selectedUser) {
+    if (selectedDate === "" || selectedUser === "") {
       alert('Por favor, selecciona una fecha y un usuario');
       return;
     }
