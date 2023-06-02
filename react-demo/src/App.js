@@ -27,31 +27,37 @@ const UserRegistrationForm = ({ onUserRegistration , registeredUsers }) => {
   };
 
   return (
-    <div>
-      <h2>Registro de Usuario</h2>
-      <form onSubmit={handleRegistration}>
+    <div class="m-20 ">
+      <h2 class=" text-3xl font-bold text-center my-8">Registro de Usuario</h2>
+      <form class="w-3/5 mx-auto text-center" onSubmit={handleRegistration}>
         <input
+          class="inline-block w-1/3 bg-slate-300 rounded-lg p-2 m-2"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Nombre"
+          required
         />
         <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Correo electrónico"
-        />
-        <input
+          class="inline-block w-1/3 bg-slate-300 rounded-lg p-2 m-2"
           type="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder="Teléfono"
+          required
         />
-        <button type="submit">Registrarse</button>
+        <input
+          class="inline-block w-2/3 bg-slate-300 rounded-lg m-2 p-2"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Correo electrónico"
+          required
+        />
+        <button class="block w-2/3 mx-auto p-4 bg-green-600 text-white rounded-lg font-bold" type="submit">Registrarse</button>
       </form>
-      <h2>Usuarios Registrados</h2>
-      <ul>
+      <h2 class="text-3xl font-bold m-8 mt-20">Usuarios Registrados</h2>
+      <ul class="grid grid-cols-3 h-auto m-8 text-slate-500 font-medium">
         {registeredUsers.map((user, index) => (
           <li key={index}>
             <p>Nombre: {user.name}</p>
@@ -98,14 +104,16 @@ const AppointmentCreation = ({ registeredUsers }) => {
   };
 
   return (
-    <div>
-      <h2>Calendario Mensual</h2>
+    <div class="text-center font-semibold w-4/5 mx-auto">
+      <h2 class="block text-center font-bold text-xl my-4">Calendario Mensual</h2>
       <Calendar onChange={handleDateSelection} value={selectedDate} />
 
       {selectedDate && (
-        <form onSubmit={handleAppointmentRegistration}>
-          <h3>Turno programado para: {selectedDate.toString()}</h3>
-          <select value={selectedUser} onChange={handleUserSelection}>
+        <form class="bg-green-600 rounded-2xl m-4 p-2" onSubmit={handleAppointmentRegistration}>
+          <h3 class=" text-slate-200 my-2">
+            Turno programado para: {selectedDate.toString().substring(0,15)} a la hora {selectedDate.toString().substring(15,21)}
+            </h3>
+          <select class="bg-white rounded-3xl inline-block py-2 px-8 mx-4" value={selectedUser} onChange={handleUserSelection}>
             <option value="">Seleccionar Usuario</option>
             {registeredUsers.map((user, index) => (
               <option value={user.name} key={index}>
@@ -113,25 +121,24 @@ const AppointmentCreation = ({ registeredUsers }) => {
               </option>
             ))}
           </select>
-          <button type="submit">Registrar Turno</button>
+          <button class="bg-white rounded-3xl inline-block py-2 px-8 mx-4" type="submit">Registrar Turno</button>
         </form>
       )}
 
-      <h2>Turnos Registrados</h2>
-      {appointments.map((appointment, index) => (
-        <div key={index}>
-          <p>Fecha: {appointment.date.toString()}</p>
-          <p>Usuario: {appointment.user}</p>
-        </div>
-      ))}
+      <h2 class="block font-bold text-xl my-8 text-left">Turnos Registrados</h2>
+      <div class="grid grid-cols-3 h-auto m-8 text-slate-500 font-medium">
+        {appointments.map((appointment, index) => (
+          <div key={index}>
+            <p>Fecha: {appointment.date.toString().substring(0,15)} hora: {appointment.date.toString().substring(15,21)}</p>
+            <p>Usuario: {appointment.user}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
-
 // Componente de notificaciones
-
-
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
 
@@ -157,8 +164,6 @@ const Notifications = () => {
     </div>
   );
 };
-
-
 
 
 // Componente de calificación y comentarios
@@ -205,34 +210,36 @@ const RatingAndReviews = () => {
   };
 
   return (
-    <div>
-      <h2>Calificación y Comentarios</h2>
-      <div>
-        <label>Calificación:</label>
-        <select value={rating} onChange={(e) => handleRatingChange(parseInt(e.target.value))}>
-          <option value={0}>Seleccionar</option>
-          <option value={1}>1 Estrella</option>
-          <option value={2}>2 Estrellas</option>
-          <option value={3}>3 Estrellas</option>
-          <option value={4}>4 Estrellas</option>
-          <option value={5}>5 Estrellas</option>
-        </select>
+    <div class="m-20 font-medium">
+      <h2 class=" text-3xl font-bold text-center my-8">Calificación y Comentarios</h2>
+      <div class="bg-green-600 rounded-3xl p-8 pb-16">
+        <div class="bg-white rounded-3xl inline-block px-8 text-centered">
+          <label class="bg-white rounded-3xl inline-block py-2 px-8" >Calificación:</label>
+          <select class="bg-white rounded-3xl inline-block py-2 px-8 text-slate-500 font-medium" value={rating} onChange={(e) => handleRatingChange(parseInt(e.target.value))}>
+            <option value={0}>Seleccione una opcion</option>
+            <option value={5}>5 Estrellas</option>
+            <option value={4}>4 Estrellas</option>
+            <option value={3}>3 Estrellas</option>
+            <option value={2}>2 Estrellas</option>
+            <option value={1}>1 Estrella </option>
+          </select>
+        </div>
+        <div class="bg-white rounded-3xl block my-4 ">
+          <label class="bg-white rounded-3xl block py-2 px-8">Comentario:</label>
+          <textarea class="bg-white rounded-3xl w-full py-2 px-8 text-slate-500 font-medium" value={comment} onChange={handleCommentChange} placeholder="Escribe tu comentario..." />
+        </div>
+        <button class="bg-white rounded-3xl py-2 px-8 absolute right-28" onClick={handleSubmit}>Enviar</button>
       </div>
-      <div>
-        <label>Comentario:</label>
-        <textarea value={comment} onChange={handleCommentChange} placeholder="Escribe tu comentario..." />
-      </div>
-      <button onClick={handleSubmit}>Enviar</button>
 
-      <h3>Comentarios Registrados:</h3>
+      <h3 class="block font-bold text-xl my-8 text-left">Comentarios</h3>
       {comments.length === 0 ? (
         <p>No hay comentarios registrados.</p>
       ) : (
-        <ul>
+        <ul class="grid grid-cols-3">
           {comments.map((comment, index) => (
-            <li key={index}>
-              <p>Calificación: {comment.rating}</p>
-              <p>Comentario: {comment.comment}</p>
+            <li class=" rounded-lg shadow-2xl border m-2 p-4 " key={index}>
+              <p class="font-semibold">Calificación: {comment.rating}</p>
+              <p class="text-slate-500 font-normal break-words h-auto m-2">{comment.comment}</p>
             </li>
           ))}
         </ul>
@@ -252,12 +259,12 @@ const App = () => {
   
   return (
   <div>
-  <h1>MeTocaFinal LTDA</h1>
-  <UserRegistrationForm onUserRegistration={handleUserRegistration} registeredUsers={registeredUsers} />
-  <h1>Creación de Turnos</h1>
-  <AppointmentCreation registeredUsers={registeredUsers} />
-  <Notifications />
-  <RatingAndReviews />
+    <h1 class="font-bold text-3xl bg-green-600 h-12 text-white pt-1 pl-4">MeTocaFinal LTDA</h1>
+    <UserRegistrationForm onUserRegistration={handleUserRegistration} registeredUsers={registeredUsers} />
+    <h1 class="text-3xl font-bold m-8 mx-28">Creación de Turnos</h1>
+    <AppointmentCreation registeredUsers={registeredUsers} />
+    <Notifications />
+    <RatingAndReviews />
   </div>
   );
   };
