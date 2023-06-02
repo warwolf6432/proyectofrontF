@@ -70,38 +70,67 @@ const UserRegistrationForm = ({ onUserRegistration , registeredUsers }) => {
   );
 };
 
+//calculamos el dia de hoy 
+const Diahoy = () => {
+  let hoy = new Date();
+  let horas = hoy.getHours()*60*60*1000;
+  let minutos= hoy.getMinutes()*60*1000;
+  let segundos= hoy.getSeconds()*1000;
+  let tiempohoy=horas+minutos+segundos;
+  hoy= new Date(hoy.getTime() - tiempohoy);
+  return hoy;
+}
+
+//calculamos el dia anterior al turno seleccionado
+const DiaAnterior = (date) => {
+  let hoy = date;
+  let DIA_EN_MILISEGUNDOS = 24 * 60 * 60 * 1000;
+  let ayer = new Date(hoy.getTime() - DIA_EN_MILISEGUNDOS);
+  return ayer;
+}
+
+
 // Componente de creación de turnos
 const AppointmentCreation = ({ registeredUsers }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [appointments, setAppointments] = useState([]);
+const [selectedDate, setSelectedDate] = useState("");
+const [selectedUser, setSelectedUser] = useState("");
+const [appointments, setAppointments] = useState([]);
 
-  const handleDateSelection = (date) => {
-    setSelectedDate(date);
-  };
+const handleDateSelection = (date) => {
+  setSelectedDate(date);
+};
 
-  const handleUserSelection = (e) => {
-    setSelectedUser(e.target.value);
-  };
+const handleUserSelection = (e) => {
+  setSelectedUser(e.target.value);
+};
 
-  const handleAppointmentRegistration = (e) => {
-    e.preventDefault();
+const handleAppointmentRegistration = (e) => {
+  e.preventDefault();
 
-    if (!selectedDate || !selectedUser) {
-      alert('Por favor, selecciona una fecha y un usuario');
-      return;
+  if (selectedDate === "" || selectedUser === "") {
+    alert('Por favor, selecciona una fecha y un usuario');
+    return;
+  }
+  else{
+    //pruebas de corroborar fecha
+    let diaanterior= DiaAnterior(selectedDate).toDateString();
+    let diahoy= Diahoy().toDateString();
+    if(diaanterior=== diahoy){
+      window.alert("Se le notifica que su turno solicitado es mañana")
     }
+  }
 
-    const appointmentData = {
-      date: selectedDate,
-      user: selectedUser
-    };
-
-    setAppointments([...appointments, appointmentData]);
-
-    setSelectedDate(null);
-    setSelectedUser(null);
+  const appointmentData = {
+    date: selectedDate,
+    user: selectedUser
   };
+
+  
+  setAppointments([...appointments, appointmentData]);
+
+  setSelectedDate(null);
+  setSelectedUser(null);
+};
 
   return (
     <div class="text-center font-semibold w-4/5 mx-auto">
