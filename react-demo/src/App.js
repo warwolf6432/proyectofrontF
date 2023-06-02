@@ -137,6 +137,7 @@ const handleAppointmentRegistration = (e) => {
     user: selectedUser
   };
 
+  
   setAppointments([...appointments, appointmentData]);
 
   setSelectedDate(null);
