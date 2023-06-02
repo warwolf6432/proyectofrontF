@@ -1,26 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 
-// Componente de registro de usuario
-const UserRegistrationForm = ({ onUserRegistration , registeredUsers }) => {
+const UserRegistrationForm = ({ onUserRegistration }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [registeredUsers, setRegisteredUsers] = useState([]);
+
+  useEffect(() => {
+    const storedUsers = localStorage.getItem('registeredUsers');
+    if (storedUsers) {
+      const parsedUsers = JSON.parse(storedUsers);
+      setRegisteredUsers(parsedUsers);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+  }, [registeredUsers]);
 
   const handleRegistration = (e) => {
     e.preventDefault();
 
-    // Crear un nuevo objeto de usuario con los datos ingresados
     const newUser = {
       name,
       email,
       phone
     };
 
-    // Llamar a la función de registro de usuario del componente padre
-    onUserRegistration(newUser);
+    const updatedUsers = [...registeredUsers, newUser];
+    setRegisteredUsers(updatedUsers);
+    onUserRegistration(updatedUsers);
 
-    // Restablecer los valores de los campos del formulario
     setName('');
     setEmail('');
     setPhone('');
